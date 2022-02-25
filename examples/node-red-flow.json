@@ -1,0 +1,281 @@
+[
+    {
+        "id": "af7a7dab1c0180e8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "136c6fbf561ea096",
+        "type": "mqtt in",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "topic": "test",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "5eda87638feb3a41",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 410,
+        "y": 300,
+        "wires": [
+            [
+                "711676d9a9b1c2c8"
+            ]
+        ]
+    },
+    {
+        "id": "38377bedf811e899",
+        "type": "debug",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 950,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "711676d9a9b1c2c8",
+        "type": "http request",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://ipv4.icanhazip.com",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 590,
+        "y": 220,
+        "wires": [
+            [
+                "38377bedf811e899"
+            ]
+        ]
+    },
+    {
+        "id": "b756441225a27369",
+        "type": "http in",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "url": "/tryme",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 420,
+        "y": 100,
+        "wires": [
+            [
+                "38377bedf811e899",
+                "762484e3548c7c35"
+            ]
+        ],
+        "info": "words"
+    },
+    {
+        "id": "46214396a347a554",
+        "type": "http response",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 850,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "762484e3548c7c35",
+        "type": "template",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!doctype html>\n<html lang='en'>\n<body>\n    <h1>we got some words here</h1>\n    <p>{{payload.payload}}</p>\n    <form method=\"post\" action=\"/trypost\">\n        <label for=\"name\">Name</label>\n        <input type=\"text\" name=\"name\"></input>\n        <label for=\"email\">email</label>\n        <input type=\"text\" name=\"email\"></input>\n        <button type=\"submit\">submit</button>\n    </form>\n</body>\n</html>",
+        "output": "str",
+        "x": 640,
+        "y": 80,
+        "wires": [
+            [
+                "46214396a347a554"
+            ]
+        ]
+    },
+    {
+        "id": "c8d26d5e46de2dcc",
+        "type": "mqtt out",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "topic": "testout",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5eda87638feb3a41",
+        "x": 690,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "d6f589a01a9fa5b7",
+        "type": "inject",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 440,
+        "y": 380,
+        "wires": [
+            [
+                "c8d26d5e46de2dcc"
+            ]
+        ]
+    },
+    {
+        "id": "c43b14eff19e7296",
+        "type": "mqtt in",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "topic": "testout",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "5eda87638feb3a41",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 830,
+        "y": 80,
+        "wires": [
+            [
+                "38377bedf811e899"
+            ]
+        ]
+    },
+    {
+        "id": "3ee4d0d74161a222",
+        "type": "http in",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "url": "/trypost",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 350,
+        "y": 520,
+        "wires": [
+            [
+                "c8d26d5e46de2dcc",
+                "e38362fb0cfe07f0"
+            ]
+        ]
+    },
+    {
+        "id": "e38362fb0cfe07f0",
+        "type": "function",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "func": "return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 540,
+        "wires": [
+            [
+                "38377bedf811e899",
+                "2e6a24201ec19f13"
+            ]
+        ]
+    },
+    {
+        "id": "ef4f180f6098715c",
+        "type": "http response",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 930,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "2e6a24201ec19f13",
+        "type": "template",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Hello {{payload.name}}!\n\nI can see that your email address is {{payload.email}}.",
+        "output": "str",
+        "x": 780,
+        "y": 580,
+        "wires": [
+            [
+                "ef4f180f6098715c"
+            ]
+        ]
+    },
+    {
+        "id": "5eda87638feb3a41",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "10.0.0.13",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    }
+]
