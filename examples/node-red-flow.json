@@ -20,8 +20,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 410,
-        "y": 300,
+        "x": 210,
+        "y": 200,
         "wires": [
             [
                 "711676d9a9b1c2c8"
@@ -41,8 +41,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 950,
-        "y": 200,
+        "x": 990,
+        "y": 180,
         "wires": []
     },
     {
@@ -53,14 +53,14 @@
         "method": "GET",
         "ret": "txt",
         "paytoqs": "ignore",
-        "url": "http://ipv4.icanhazip.com",
+        "url": "https://api.ipify.org?format=json\t",
         "tls": "",
         "persist": false,
         "proxy": "",
         "authType": "",
         "senderr": false,
-        "x": 590,
-        "y": 220,
+        "x": 370,
+        "y": 200,
         "wires": [
             [
                 "38377bedf811e899"
@@ -130,7 +130,7 @@
         "correl": "",
         "expiry": "",
         "broker": "5eda87638feb3a41",
-        "x": 690,
+        "x": 630,
         "y": 360,
         "wires": []
     },
@@ -155,11 +155,13 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 440,
+        "x": 320,
         "y": 380,
         "wires": [
             [
-                "c8d26d5e46de2dcc"
+                "c8d26d5e46de2dcc",
+                "2c0ca6050c2e28ee",
+                "edb6fdca475f5607"
             ]
         ]
     },
@@ -176,8 +178,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 830,
-        "y": 80,
+        "x": 810,
+        "y": 120,
         "wires": [
             [
                 "38377bedf811e899"
@@ -194,7 +196,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 350,
-        "y": 520,
+        "y": 480,
         "wires": [
             [
                 "c8d26d5e46de2dcc",
@@ -229,8 +231,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 930,
-        "y": 540,
+        "x": 950,
+        "y": 500,
         "wires": []
     },
     {
@@ -242,13 +244,210 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "Hello {{payload.name}}!\n\nI can see that your email address is {{payload.email}}.",
+        "template": "<div>\nHello {{payload.name}}!\n\nI can see that your email address is {{payload.email}}.\n</div>\n<div>\n    <a href=\"/tryme\">Go back</a>\n</div>",
         "output": "str",
-        "x": 780,
-        "y": 580,
+        "x": 800,
+        "y": 520,
         "wires": [
             [
                 "ef4f180f6098715c"
+            ]
+        ]
+    },
+    {
+        "id": "2c0ca6050c2e28ee",
+        "type": "mqtt out",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "topic": "underdog_in",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5eda87638feb3a41",
+        "x": 630,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "edb6fdca475f5607",
+        "type": "mqtt out",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "topic": "testmac",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5eda87638feb3a41",
+        "x": 640,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "378202dc5bcf2d7a",
+        "type": "comment",
+        "z": "af7a7dab1c0180e8",
+        "name": "phone",
+        "info": "",
+        "x": 610,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "daa1d359726aaaca",
+        "type": "comment",
+        "z": "af7a7dab1c0180e8",
+        "name": "macbook",
+        "info": "",
+        "x": 640,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "bde4efcf3dfc5ab7",
+        "type": "comment",
+        "z": "af7a7dab1c0180e8",
+        "name": "wintendo (this instance)",
+        "info": "",
+        "x": 680,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "3f97a4dc94ee820e",
+        "type": "comment",
+        "z": "af7a7dab1c0180e8",
+        "name": "put our public ip into debug window",
+        "info": "",
+        "x": 440,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "0982294fe7e3cda0",
+        "type": "inject",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 80,
+        "y": 300,
+        "wires": [
+            [
+                "68aba218cd6c1ba4"
+            ]
+        ]
+    },
+    {
+        "id": "68aba218cd6c1ba4",
+        "type": "mqtt out",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "topic": "test",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5eda87638feb3a41",
+        "x": 310,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "5b1482ad538407d5",
+        "type": "inject",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "on",
+        "payloadType": "str",
+        "x": 950,
+        "y": 400,
+        "wires": [
+            [
+                "ce9e28e9e40710dc",
+                "38377bedf811e899"
+            ]
+        ]
+    },
+    {
+        "id": "ce9e28e9e40710dc",
+        "type": "mqtt out",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "topic": "esp32/output",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5eda87638feb3a41",
+        "x": 1130,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "99c9d3b5d5613552",
+        "type": "inject",
+        "z": "af7a7dab1c0180e8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "off",
+        "payloadType": "str",
+        "x": 950,
+        "y": 360,
+        "wires": [
+            [
+                "ce9e28e9e40710dc",
+                "38377bedf811e899"
             ]
         ]
     },
