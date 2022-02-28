@@ -8,11 +8,11 @@ I've attached the json for a node red flow. This node red flow has a lot more th
 
 ![](node-red-screenshot.png)
 
-## config-wifi.cpp
+## config-wifi.ino
 
 This project uses the Preferences library to set a key value pair in non-volatile memory. This way we can store our password by uploading a sketch once, and then our regular sketch can do the heavy lifting.
 
-## mqtt-led-example.cpp
+## mqtt-led-example.ino
 
 - Gathers credentials from preferences nvm
 - Uses those credentials to connect to a wifi network
