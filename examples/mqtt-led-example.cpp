@@ -1,16 +1,16 @@
-/* Cobbled this together with a few tutorials I found online.
-
- It connects to my wifi, then connects to the mqtt server on radmax
-
- Then, it accepts input from an mqtt topic called 'esp32/output' and blinks the onboard led */
-
-
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include <Preferences.h>
+#include "time.h"
 
 #define LED_BUILTIN 2
 
+const char* ntpServer="pool.ntp.org";
+const long gmtOffset_sec = 0;
+const int daylightOffset_sec = 3600;
+
 WiFiClient espClient;
+Preferences preferences;
 PubSubClient client(espClient);
 
 const char* mqtt_server = "10.0.0.13";
@@ -19,29 +19,49 @@ long lastMsg = 0;
 char msg[50];
 int value = 0;
 
+String ssid;
+String password;
+
 void setup()
 {
     Serial.begin(115200);
     delay(10);
 
     // We start by connecting to a WiFi network
-    WiFi.begin("omitted","omitted");  
+    preferences.begin("wifi-led","false");
+    ssid = preferences.getString("ssid","");
+    password = preferences.getString("password","");
+
+    if (ssid == "" || password == ""){
+      Serial.println("credentials need to be configured first");
+    } else {
+      Serial.print("Waiting for WiFi... ");
+      WiFi.mode(WIFI_STA);
+      WiFi.begin(ssid.c_str(),password.c_str());
+      while(WiFi.status() != WL_CONNECTED) {
+        Serial.print(".");
+        delay(500);
+     }      
+     Serial.println("");
+     Serial.println("WiFi connected");
+     Serial.println("IP address: ");
+     Serial.println(WiFi.localIP());
+    }
+    
     client.setServer(mqtt_server,1883);  
     client.setCallback(callback);
     pinMode(LED_BUILTIN,OUTPUT);
     Serial.println();
-    Serial.println();
-    Serial.print("Waiting for WiFi... ");
+    Serial.println();    
 
-    while(WiFi.status() != WL_CONNECTED) {
-        Serial.print(".");
-        delay(500);
+    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+    struct tm timeinfo;
+    if(!getLocalTime(&timeinfo)){
+      Serial.println("Failed to obtain time");
+      return;
     }
 
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
+    Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
 
     delay(500);
 }
