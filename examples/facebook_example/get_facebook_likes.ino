@@ -1,19 +1,14 @@
-/*
-There's a bunch of setup required before this code can even do anything.
-
-- Create a facebook app
-- add your own user as an admin to the app
-- (maybe) be the admin of a page (not sure if I can pull fan_count for pages that I don't admin)
-- load all the variables below 
-*/
-
+#include <TM1637Display.h>
 #include <HTTPClient.h>;
 #include <ssl_client.h>
 #include <Preferences.h>
 #include <WiFi.h>
 #include <ArduinoJson.h>
 
-// stored as preferences non-volatile storage
+#define CLK 4
+#define DIO 0
+
+TM1637Display display(CLK, DIO);
 
 String ssid;
 String password;
@@ -23,8 +18,6 @@ String clientToken;
 String userId;
 String pageId;
 String server;
-
-// end preferences we set manually, PAT gets set below if it's not available
 
 int httpCode;
 String req;
@@ -65,10 +58,12 @@ const char* ca_cert = \
 
 HTTPClient http;
 
-void setup() {  
+void setup() {
+  // put your setup code here, to run once:
   Serial.begin(115200);
   delay(10);
 
+  display.setBrightness(0x00);
   pref.begin("HFPFanCount",false);
   ssid = pref.getString("ssid","");
   password = pref.getString("password","");  
@@ -95,9 +90,9 @@ void setup() {
 
     if (PAT == ""){
       Serial.println("PAT not set, going throug fb oauth flow");
-      // with auth code, be quick to copy and paste the link and authorize!
+      // TODO get auth code, be quick to copy and paste the link and authorize!
       // would definitely be smarter to set up an http server endpoint for this flow
-      // or, just do all this crap in postman if we haven't turned on the chip in 60 days
+      // or, just do all this crap in postman every 60 days
       String scope = "read_insights,pages_show_list,pages_read_engagement,pages_read_user_content,public_profile";
       String httpRequestData = "access_token=" + appId + "|" + clientToken + "&scope=" + scope;
       req = "https://" + server + "/v2.6/device/login";
@@ -105,7 +100,7 @@ void setup() {
       http.begin(req, ca_cert);
       httpCode = http.POST(httpRequestData);
       if (httpCode > 0){
-        DynamicJsonDocument doc(2048);        
+        DynamicJsonDocument doc(2048);
         deserializeJson(doc, http.getStream());      
         String user_code = doc["user_code"].as<String>();  
         long_code = doc["code"].as<String>();      
@@ -192,6 +187,8 @@ void setup() {
         Serial.print("Hope For Pits has ");
         Serial.print(fan_count);
         Serial.println(" likes!");
+        display.setBrightness(0x0f);
+        display.showNumberDec(fan_count);
       }    
     }
   }
@@ -212,6 +209,8 @@ void loop() {
     Serial.print("Hope For Pits has ");
     Serial.print(fan_count);
     Serial.println(" likes!");
+    display.setBrightness(0x0f);
+    display.showNumberDec(fan_count);
   }  
   delay(60000); // chill for 1 minute
 

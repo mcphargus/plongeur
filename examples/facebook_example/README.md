@@ -19,3 +19,11 @@ Hope For Pits has 1926 likes!
 ## Goal
 
 Getting the int for fan_count is really just the start. My plan is to display the value on a big LED reader board, or at least a 4-digit 7-segment display.
+
+## update 
+
+Managed to get this working with a TM1637-driven 4-digit led display.
+
+The code required to drive the display was nothing compared to the tom-foolery required with the facebook graph api.
+
+![LEDs!](7segled.jpg)
