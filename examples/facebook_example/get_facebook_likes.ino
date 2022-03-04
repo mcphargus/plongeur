@@ -1,6 +1,5 @@
 #include <TM1637Display.h>
 #include <HTTPClient.h>;
-#include <ssl_client.h>
 #include <Preferences.h>
 #include <WiFi.h>
 #include <ArduinoJson.h>
@@ -58,12 +57,43 @@ const char* ca_cert = \
 
 HTTPClient http;
 
+const uint8_t hope[] {
+  SEG_F | SEG_G | SEG_B | SEG_E | SEG_C, //H
+  SEG_G | SEG_C | SEG_D | SEG_E,         //o
+  SEG_E | SEG_F | SEG_A | SEG_B | SEG_G, //P
+  SEG_A | SEG_F | SEG_G | SEG_E | SEG_D  //E  
+};
+
+const uint8_t _for[] {
+  SEG_E | SEG_F | SEG_G | SEG_A,         //F
+  SEG_G | SEG_E | SEG_D | SEG_C,         //o
+  SEG_E | SEG_G,                         //r
+  0x0
+};
+
+const uint8_t pits[] {
+  SEG_E | SEG_F | SEG_A | SEG_B | SEG_G,  //P
+  SEG_E,                                  //i
+  SEG_F | SEG_E| SEG_D | SEG_G,           //t
+  SEG_A | SEG_F | SEG_G | SEG_C | SEG_D   //S 
+};
+
+void banner_message(){
+  display.setSegments(hope);
+  delay(750);
+  display.setSegments(_for);
+  delay(750);
+  display.setSegments(pits);
+  delay(750);
+}
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   delay(10);
-
-  display.setBrightness(0x00);
+  display.clear();
+  display.setBrightness(7);
+  banner_message();  
   pref.begin("HFPFanCount",false);
   ssid = pref.getString("ssid","");
   password = pref.getString("password","");  
@@ -74,6 +104,8 @@ void setup() {
   pageId = pref.getString("pageId","");
   PAT = pref.getString("PAT","");
   server = "graph.facebook.com";
+
+  
   
   if (ssid == "" || password == ""){
     Serial.println("credentials need to be set first");
@@ -186,9 +218,15 @@ void setup() {
         fan_count = doc["fan_count"].as<int>();
         Serial.print("Hope For Pits has ");
         Serial.print(fan_count);
-        Serial.println(" likes!");
-        display.setBrightness(0x0f);
-        display.showNumberDec(fan_count);
+        Serial.println(" likes!");        
+        
+        display.clear();        
+        int k;
+        for (k = 0; k < 8; k++) {          
+          display.setBrightness(k);
+          display.showNumberDec(fan_count);
+          delay(250);
+        }
       }    
     }
   }
@@ -196,7 +234,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:  
-  
+  banner_message();
   Serial.println("getting fan count");
   req = "https://" + server + "/" + pageId + \
     "?fields=fan_count&access_token=" + PAT;
@@ -208,10 +246,14 @@ void loop() {
     fan_count = doc["fan_count"].as<int>();
     Serial.print("Hope For Pits has ");
     Serial.print(fan_count);
-    Serial.println(" likes!");
-    display.setBrightness(0x0f);
-    display.showNumberDec(fan_count);
-  }  
+    Serial.println(" likes!");    
+    int k;
+    for (k = 0; k < 8; k++) {          
+      display.setBrightness(k);
+      display.showNumberDec(fan_count);
+      delay(250);
+    }    
+  }
   delay(60000); // chill for 1 minute
 
 }

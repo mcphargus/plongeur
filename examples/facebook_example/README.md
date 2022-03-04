@@ -1,5 +1,7 @@
 ## Get Facebook Page Likes
 
+![animated](./hope-for-pits.gif)
+
 If you're an admin for a facebook page, this could be of interest.
 
 There's a flow in here for authenticating to a page using your app / user credentials.
